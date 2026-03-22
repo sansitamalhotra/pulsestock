@@ -1,16 +1,8 @@
 "use client";
 import { useState } from "react";
 
-interface SentimentData {
-  ticker: string;
-  score: number;
-  label: string;
-  brief: string;
-  posts: { source: string; text: string; url: string }[];
-}
-
 interface Props {
-  onResult: (data: SentimentData) => void;
+  onResult: (data: any) => void;
   onLoading: (loading: boolean) => void;
 }
 
@@ -28,11 +20,11 @@ export default function SearchBar({ onResult, onLoading }: Props) {
   }
 
   return (
-    <div style={{ padding: "32px 32px 0 32px" }}>
-      <div style={{ display: "flex", maxWidth: "600px" }}>
+    <div style={{ padding: "0 32px" }}>
+      <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto" }}>
         <span style={{
-          background: "#111", border: "1px solid #222", borderRight: "none",
-          padding: "12px 16px", color: "#444", fontSize: "14px", borderRadius: "6px 0 0 6px",
+          background: "#111", border: "1px solid #2a2a2a", borderRight: "none",
+          padding: "14px 18px", color: "#555", fontSize: "16px", borderRadius: "8px 0 0 8px",
         }}>$</span>
         <input
           value={input}
@@ -40,20 +32,23 @@ export default function SearchBar({ onResult, onLoading }: Props) {
           onKeyDown={e => e.key === "Enter" && handleScan()}
           placeholder="ENTER TICKER... (e.g. AAPL)"
           style={{
-            flex: 1, background: "#111", border: "1px solid #222", borderRight: "none",
-            padding: "12px 16px", color: "#e0e0e0", fontSize: "14px", outline: "none",
+            flex: 1, background: "#111", border: "1px solid #2a2a2a", borderRight: "none",
+            padding: "14px 18px", color: "#e0e0e0", fontSize: "14px", outline: "none",
             fontFamily: "'Courier New', monospace", letterSpacing: "2px",
           }}
         />
         <button onClick={handleScan} style={{
-          background: "#00ff88", border: "none", padding: "12px 24px",
-          color: "#080808", fontWeight: "800", fontSize: "13px", cursor: "pointer",
+          background: "#00ff88", border: "none", padding: "14px 28px",
+          color: "#080808", fontWeight: "900", fontSize: "13px", cursor: "pointer",
           fontFamily: "'Courier New', monospace", letterSpacing: "2px",
-          borderRadius: "0 6px 6px 0",
+          borderRadius: "0 8px 8px 0",
         }}>
           SCAN
         </button>
       </div>
+      <div style={{ color: "#2a2a2a", fontSize: "10px", letterSpacing: "2px", marginTop: "10px", textAlign: "center" }}>
+        TRY: AAPL · TSLA · NVDA · SHOP · AMD · MSFT
+      </div>
     </div>
   );
-}
+}   
