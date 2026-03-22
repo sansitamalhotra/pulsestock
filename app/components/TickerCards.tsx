@@ -16,7 +16,7 @@ export default function TickerCards() {
   useEffect(() => {
     TICKERS.forEach(async (ticker) => {
       try {
-        const res = await fetch(`http://localhost:8000/price/${ticker}`);
+        const res = await fetch(`https://pulsestock-api.onrender.com/price/${ticker}`);
         const data = await res.json();
         setPrices((prev) => ({ ...prev, [ticker]: data }));
       } catch (e) {

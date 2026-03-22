@@ -12,7 +12,7 @@ export default function SearchBar({ onResult, onLoading }: Props) {
   async function handleScan() {
     if (!input.trim()) return;
     onLoading(true);
-    const res = await fetch(`http://localhost:8000/sentiment/${input.toUpperCase()}`);
+    const res = await fetch(`https://pulsestock-api.onrender.com/sentiment/${input.toUpperCase()}`);
     const data = await res.json();
     onResult(data);
     onLoading(false);
