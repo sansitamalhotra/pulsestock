@@ -1,74 +1,55 @@
-export default function SentimentPanel() {
+interface Props {
+  ticker: string;
+  score: number;
+  label: string;
+  brief: string;
+}
+
+export default function SentimentPanel({ ticker, score, label, brief }: Props) {
+  const labelColor = label === "BULLISH" ? "#00ff88" : label === "BEARISH" ? "#ff4466" : "#ffd700";
+
   return (
     <div style={{
-      margin: "0 32px",
+      margin: "20px 32px 0 32px",
       background: "#111",
       border: "1px solid #1a1a1a",
       borderRadius: "12px",
       padding: "28px",
     }}>
-
-      {/* Ticker + label */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px", flexWrap: "wrap", gap: "16px" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "6px" }}>
-            <span style={{ fontSize: "26px", fontWeight: "800", color: "#e0e0e0" }}>
-              $AAPL
-            </span>
-            <span style={{
-              border: "1px solid #00ff88",
-              color: "#00ff88",
-              padding: "3px 10px",
-              fontSize: "10px",
-              letterSpacing: "2px",
-              borderRadius: "4px",
-            }}>
-              BULLISH
+            <span style={{ fontSize: "26px", fontWeight: "800", color: "#e0e0e0" }}>${ticker}</span>
+            <span style={{ border: `1px solid ${labelColor}`, color: labelColor, padding: "3px 10px", fontSize: "10px", letterSpacing: "2px", borderRadius: "4px" }}>
+              {label}
             </span>
           </div>
-          <div style={{ color: "#333", fontSize: "12px" }}>Apple Inc.</div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: "28px", fontWeight: "800", color: "#e0e0e0" }}>$189.43</div>
-          <div style={{ color: "#00ff88", fontSize: "13px" }}>▲ $1.23 today</div>
+          <div style={{ fontSize: "36px", fontWeight: "800", color: labelColor }}>{score}</div>
+          <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px" }}>SENTIMENT SCORE</div>
         </div>
       </div>
 
-      {/* Score bar */}
       <div style={{ marginBottom: "24px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-          <span style={{ color: "#ff4466", fontSize: "10px", letterSpacing: "1px" }}>BEARISH</span>
-          <span style={{ color: "#555", fontSize: "10px", letterSpacing: "1px" }}>NEUTRAL</span>
-          <span style={{ color: "#00ff88", fontSize: "10px", letterSpacing: "1px" }}>BULLISH</span>
+          <span style={{ color: "#ff4466", fontSize: "10px" }}>BEARISH</span>
+          <span style={{ color: "#555", fontSize: "10px" }}>NEUTRAL</span>
+          <span style={{ color: "#00ff88", fontSize: "10px" }}>BULLISH</span>
         </div>
         <div style={{ height: "6px", background: "#1a1a1a", borderRadius: "3px" }}>
           <div style={{
-            height: "100%",
-            width: "74%",
+            height: "100%", width: `${score}%`,
             background: "linear-gradient(90deg, #ff4466, #ffd700 50%, #00ff88)",
-            borderRadius: "3px",
+            borderRadius: "3px", transition: "width 0.8s ease",
           }} />
         </div>
-        <div style={{ color: "#333", fontSize: "10px", marginTop: "8px" }}>
-          BASED ON 3,388 REDDIT POSTS · LAST 24H
-        </div>
       </div>
 
-      {/* AI Brief */}
-      <div style={{
-        background: "#0a0a0a",
-        borderLeft: "3px solid #00ff88",
-        padding: "16px 20px",
-        borderRadius: "0 8px 8px 0",
-      }}>
-        <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px", marginBottom: "10px" }}>
-          AI BRIEF
-        </div>
-        <p style={{ color: "#999", fontSize: "13px", lineHeight: "1.8", margin: 0 }}>
-          Reddit is strongly bullish on $AAPL this week, driven by anticipation of upcoming WWDC announcements and strong iPhone sales data. Sentiment shifted positive 36 hours ago. Key concern: valuation stretched at current levels, mentioned in 18% of posts.
-        </p>
+      <div style={{ background: "#0a0a0a", borderLeft: "3px solid #00ff88", padding: "16px 20px", borderRadius: "0 8px 8px 0" }}>
+        <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px", marginBottom: "10px" }}>AI BRIEF</div>
+        <p style={{ color: "#999", fontSize: "13px", lineHeight: "1.8", margin: 0 }}>{brief}</p>
       </div>
-
     </div>
   );
 }
