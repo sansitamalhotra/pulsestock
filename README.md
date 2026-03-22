@@ -10,8 +10,8 @@
 **Live:** [pulsestock.vercel.app](https://pulsestock.vercel.app) &nbsp;|&nbsp; **API:** [pulsestock-api.onrender.com](https://pulsestock-api.onrender.com)
 
 ---
-<img width="1462" height="730" alt="Screenshot 2026-03-22 at 4 02 53 PM" src="https://github.com/user-attachments/assets/e3fced84-6b37-49ff-ab82-070aee9caf8c" />
 <img width="1465" height="722" alt="Screenshot 2026-03-22 at 4 03 18 PM" src="https://github.com/user-attachments/assets/1423e9eb-eb64-485b-aa5e-8b351c97e3d6" />
+<img width="1462" height="730" alt="Screenshot 2026-03-22 at 4 02 53 PM" src="https://github.com/user-attachments/assets/e3fced84-6b37-49ff-ab82-070aee9caf8c" />
 <img width="1454" height="713" alt="Screenshot 2026-03-22 at 4 04 06 PM" src="https://github.com/user-attachments/assets/d6e13cde-0728-423b-85d5-2876fc09bbe5" />
 
 ## What Is This?
