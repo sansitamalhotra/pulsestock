@@ -17,7 +17,7 @@ export default function PostsList({ posts }: Props) {
       borderRadius: "12px",
       padding: "24px",
     }}>
-      <div style={{ color: "#333", fontSize: "10px", letterSpacing: "3px", marginBottom: "16px" }}>
+      <div style={{ color: "#555", fontSize: "10px", letterSpacing: "3px", marginBottom: "16px" }}>
         TOP HEADLINES // DRIVING SENTIMENT
       </div>
 
@@ -32,8 +32,8 @@ export default function PostsList({ posts }: Props) {
             background: "#00ff88",
           }} />
           <div style={{ flex: 1 }}>
-            <div style={{ color: "#333", fontSize: "10px", marginBottom: "4px" }}>{post.source}</div>
-            <a href={post.url} target="_blank" rel="noreferrer" style={{ color: "#aaa", fontSize: "13px", lineHeight: "1.5", textDecoration: "none" }}>
+            <div style={{ color: "#555", fontSize: "10px", marginBottom: "4px" }}>{post.source}</div>
+            <a href={post.url} target="_blank" rel="noreferrer" style={{ color: "#e0e0e0", fontSize: "13px", lineHeight: "1.5", textDecoration: "none" }}>
               {post.text}
             </a>
           </div>

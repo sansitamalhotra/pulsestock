@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.reddit import get_news
 from app.sentiment import score_headlines
+from app.brief import generate_brief
 
 app = FastAPI()
 
@@ -20,11 +21,12 @@ def root():
 def get_sentiment(ticker: str):
     headlines = get_news(ticker)
     score, label = score_headlines(headlines)
+    brief = generate_brief(ticker, headlines)
 
     return {
         "ticker": ticker.upper(),
         "score": score,
         "label": label,
-        "brief": "AI brief temporarily disabled.",
+        "brief": brief,
         "posts": headlines[:4],
     }

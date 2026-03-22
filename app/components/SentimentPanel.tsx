@@ -27,7 +27,7 @@ export default function SentimentPanel({ ticker, score, label, brief }: Props) {
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: "36px", fontWeight: "800", color: labelColor }}>{score}</div>
-          <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px" }}>SENTIMENT SCORE</div>
+          <div style={{ color: "#555", fontSize: "10px", letterSpacing: "2px" }}>SENTIMENT SCORE</div>
         </div>
       </div>
 
@@ -47,8 +47,8 @@ export default function SentimentPanel({ ticker, score, label, brief }: Props) {
       </div>
 
       <div style={{ background: "#0a0a0a", borderLeft: "3px solid #00ff88", padding: "16px 20px", borderRadius: "0 8px 8px 0" }}>
-        <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px", marginBottom: "10px" }}>AI BRIEF</div>
-        <p style={{ color: "#999", fontSize: "13px", lineHeight: "1.8", margin: 0 }}>{brief}</p>
+        <div style={{ color: "#555", fontSize: "10px", letterSpacing: "2px", marginBottom: "10px" }}>AI BRIEF</div>
+        <p style={{ color: "#ccc", fontSize: "13px", lineHeight: "1.8", margin: 0 }}>{brief}</p>
       </div>
     </div>
   );
