@@ -150,7 +150,7 @@ export default function Home() {
             transition={{ duration: 0.7 }}
             style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 32px" }}
           >
-            <div style={{ fontSize: "10px", letterSpacing: "5px", color: "#444", marginBottom: "20px" }}>
+            <div style={{ fontSize: "10px", letterSpacing: "5px", color: "#555", marginBottom: "20px" }}>
               REAL-TIME SENTIMENT ANALYSIS
             </div>
             <h1 style={{
@@ -174,7 +174,7 @@ export default function Home() {
     }} />
   </div>
 </h1>
-            <div style={{ color: "#2a2a2a", fontSize: "12px", letterSpacing: "5px", marginBottom: "44px" }}>
+            <div style={{ color: "#444", fontSize: "12px", letterSpacing: "5px", marginBottom: "44px" }}>
               SENTIMENT TERMINAL
             </div>
             <SearchBar onResult={handleResult} onLoading={setLoading} />
