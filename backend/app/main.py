@@ -4,6 +4,7 @@ from app.reddit import get_news
 from app.sentiment import score_headlines
 from app.brief import generate_brief
 import yfinance as yf
+from app.agent import run_agent
 
 app = FastAPI()
 
@@ -16,6 +17,11 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"status": "PulseStock backend running"}
+
+@app.get("/agent")
+def ask_agent(q: str, session_id: str = "default"):
+    result = run_agent(q, session_id)
+    return {"response": result}
 
 @app.get("/price/{ticker}")
 def get_price(ticker: str):

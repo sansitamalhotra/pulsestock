@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-
+const API = process.env.NEXT_PUBLIC_API_URL || "https://pulsestock-api.onrender.com";
 interface Props {
   onResult: (data: any) => void;
   onLoading: (loading: boolean) => void;
@@ -12,13 +12,12 @@ export default function SearchBar({ onResult, onLoading }: Props) {
   async function handleScan() {
     if (!input.trim()) return;
     onLoading(true);
-    const res = await fetch(`https://pulsestock-api.onrender.com/sentiment/${input.toUpperCase()}`);
+    const res = await fetch(`${API}/sentiment/${input.toUpperCase()}`);
     const data = await res.json();
     onResult(data);
     onLoading(false);
     setInput("");
   }
-
   return (
     <div style={{ padding: "0 32px" }}>
       <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto" }}>

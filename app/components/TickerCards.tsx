@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-
+const API = process.env.NEXT_PUBLIC_API_URL || "https://pulsestock-api.onrender.com";
 interface TickerData {
   ticker: string;
   price: number;
@@ -16,7 +16,7 @@ export default function TickerCards() {
   useEffect(() => {
     TICKERS.forEach(async (ticker) => {
       try {
-        const res = await fetch(`https://pulsestock-api.onrender.com/price/${ticker}`);
+       const res = await fetch(`${API}/price/${ticker}`);
         const data = await res.json();
         setPrices((prev) => ({ ...prev, [ticker]: data }));
       } catch (e) {

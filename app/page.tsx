@@ -6,6 +6,7 @@ import SearchBar from "./components/SearchBar";
 import TickerCards from "./components/TickerCards";
 import SentimentPanel from "./components/SentimentPanel";
 import PostsList from "./components/PostsList";
+import AgentChat from "./components/AgentChat";
 
 interface SentimentData {
   ticker: string;
@@ -192,6 +193,7 @@ export default function Home() {
           <PostsList posts={data.posts} />
         </>
       )}
+      <AgentChat />
     </main>
   );
 }
