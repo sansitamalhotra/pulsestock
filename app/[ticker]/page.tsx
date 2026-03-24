@@ -7,6 +7,7 @@ import SentimentPanel from "../components/SentimentPanel";
 import PostsList from "../components/PostsList";
 import AgentChat from "../components/AgentChat";
 import SearchBar from "../components/SearchBar";
+import Watchlist from "../components/WatchList";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "https://pulsestock-api.onrender.com";
 
@@ -70,6 +71,7 @@ export default function TickerPage() {
       )}
 
       <AgentChat />
+      <Watchlist />
     </main>
   );
 }

@@ -8,7 +8,7 @@ import SentimentPanel from "./components/SentimentPanel";
 import PostsList from "./components/PostsList";
 import AgentChat from "./components/AgentChat";
 import { useRouter } from "next/navigation";
-
+import Watchlist from "./components/WatchList";
 
 interface SentimentData {
   ticker: string;
@@ -201,6 +201,7 @@ export default function Home() {
         </>
       )}
       <AgentChat />
+      <Watchlist />
     </main>
   );
 }
