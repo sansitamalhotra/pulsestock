@@ -5,14 +5,23 @@
 ![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge&logo=openai&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)
 
 **Live:** [pulsestock.vercel.app](https://pulsestock.vercel.app) &nbsp;|&nbsp; **API:** [pulsestock-api.onrender.com](https://pulsestock-api.onrender.com)
 
+> Know the vibe before the move.
+
 ---
-<img width="1465" height="722" alt="Screenshot 2026-03-22 at 4 03 18 PM" src="https://github.com/user-attachments/assets/1423e9eb-eb64-485b-aa5e-8b351c97e3d6" />
-<img width="1462" height="730" alt="Screenshot 2026-03-22 at 4 02 53 PM" src="https://github.com/user-attachments/assets/e3fced84-6b37-49ff-ab82-070aee9caf8c" />
-<img width="1454" height="713" alt="Screenshot 2026-03-22 at 4 04 06 PM" src="https://github.com/user-attachments/assets/d6e13cde-0728-423b-85d5-2876fc09bbe5" />
+
+<img width="1470" height="738" alt="Landing" src="https://github.com/user-attachments/assets/94fed1c5-19e4-43bf-9869-9141313e6d8c" />
+<img width="1470" height="730" alt="AAPL Result" src="https://github.com/user-attachments/assets/5cb479c6-6804-4884-8e39-c588957bdd1f" />
+<img width="1459" height="736" alt="NVDA Result" src="https://github.com/user-attachments/assets/39cc0abd-ee05-470e-b8a4-d2fb0b303c55" />
+<img width="419" height="625" alt="Watchlist" src="https://github.com/user-attachments/assets/afca0191-cd9d-4397-8d1f-70a1ab9f554a" />
+<img width="343" height="404" alt="AI Agent Chat" src="https://github.com/user-attachments/assets/91e527ae-75cb-4cf2-83f7-c68aade7abc4" />
+<img width="1470" height="240" alt="Ticker Bar" src="https://github.com/user-attachments/assets/a4af8e80-ba82-469c-bb72-e5144426331f" />
+
+---
 
 ## What Is This?
 
@@ -22,18 +31,22 @@ Type any ticker. In under 30 seconds, you get:
 - A live sentiment score (0–100, BEARISH to BULLISH)
 - An AI-generated analyst brief summarizing what's driving the mood
 - The top headlines behind the signal
-- Live price data with change and percentage
+- Live price data with daily change and percentage
 
-It's a Bloomberg terminal for people who don't have Bloomberg.
+Then ask the AI agent anything — compare tickers, dig deeper, ask follow-up questions. It remembers the conversation.
 
 ---
 
 ## Features
 
-- **Real-time news ingestion** — pulls live headlines from NewsAPI on every search, filtered to financial sources only
+- **Real-time news ingestion** — pulls live headlines from NewsAPI on every scan, filtered to financial sources only
 - **Sentiment scoring engine** — custom keyword-based NLP pipeline scores bullish/bearish/neutral signal
 - **AI analyst brief** — GPT-4o-mini synthesizes headlines into a 2-3 sentence analyst-style summary
 - **Live stock prices** — yfinance integration with price, daily change, and percentage
+- **AI agent with memory** — LangChain + LangGraph ReAct agent with tool calling across 3 tools and persistent session memory
+- **Shareable URLs** — every scan generates a shareable link e.g. `pulsestock.vercel.app/aapl`
+- **Watchlist** — save tickers and see all sentiment scores + prices at a glance, persisted in localStorage
+- **Scan history** — last 5 scanned tickers shown as quick-access chips under the search bar
 - **Bloomberg-style UI** — animated ticker bar, scrolling sentiment cards, Framer Motion mini charts
 - **Fully deployed** — Vercel (frontend) + Render (backend)
 
@@ -46,9 +59,28 @@ It's a Bloomberg terminal for people who don't have Bloomberg.
 | Frontend | Next.js 15, TypeScript, Framer Motion |
 | Backend | FastAPI, Python 3.14 |
 | AI Brief | OpenAI GPT-4o-mini |
+| AI Agent | LangChain, LangGraph, MemorySaver |
 | News Data | NewsAPI |
 | Price Data | yfinance |
-| Deployment | Vercel + Render |
+| Deployment | Vercel (frontend) + Render (backend) |
+
+---
+
+## AI Agent
+
+The agent uses a ReAct (Reasoning + Acting) loop — it decides which tools to call, calls them, reasons over the results, and responds. Memory is persisted per session so follow-up questions work naturally.
+
+```
+User: "Compare AAPL vs TSLA"
+  → Agent calls get_sentiment("AAPL")
+  → Agent calls get_sentiment("TSLA")
+  → Agent calls get_price("AAPL")
+  → Agent calls get_price("TSLA")
+  → Agent synthesizes comparison with scores, labels, prices
+
+User: "Which one would you watch more closely?"
+  → Agent remembers previous context and reasons over both results
+```
 
 ---
 
@@ -76,6 +108,7 @@ python3 -m uvicorn app.main:app --reload
 ### Frontend
 
 ```bash
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
 npm install
 npm run dev
 ```
@@ -89,19 +122,24 @@ Open `http://localhost:3000`
 ```
 pulsestock/
 ├── app/
+│   ├── [ticker]/
+│   │   └── page.tsx            # Shareable ticker pages
 │   ├── components/
 │   │   ├── Header.tsx          # Pulsing logo + live indicator
-│   │   ├── SearchBar.tsx       # Ticker input + scan button
+│   │   ├── SearchBar.tsx       # Ticker input + scan history
 │   │   ├── TickerCards.tsx     # Live price bar (yfinance)
 │   │   ├── SentimentPanel.tsx  # Score bar + AI brief
-│   │   └── PostsList.tsx       # Top headlines
+│   │   ├── PostsList.tsx       # Top headlines
+│   │   ├── AgentChat.tsx       # AI agent chat UI with suggested prompts
+│   │   └── Watchlist.tsx       # Saved tickers panel
 │   └── page.tsx                # Hero landing + results view
 ├── backend/
 │   └── app/
 │       ├── main.py             # FastAPI routes
 │       ├── reddit.py           # NewsAPI ingestion + filtering
 │       ├── sentiment.py        # NLP scoring engine
-│       └── brief.py            # GPT-4o-mini brief generation
+│       ├── brief.py            # GPT-4o-mini brief generation
+│       └── agent.py            # LangChain ReAct agent + tools
 └── README.md
 ```
 
@@ -113,6 +151,7 @@ pulsestock/
 |---|---|
 | `GET /sentiment/{ticker}` | Score, label, AI brief, top headlines |
 | `GET /price/{ticker}` | Live price, daily change, percentage |
+| `GET /agent?q={query}&session_id={id}` | AI agent with persistent memory |
 
 ---
 
@@ -122,7 +161,6 @@ pulsestock/
 - [ ] Historical sentiment trend charts
 - [ ] Reddit integration (r/wallstreetbets, r/CanadianInvestor)
 - [ ] Email/SMS alerts for sentiment shifts
-- [ ] Portfolio watchlist with aggregate sentiment score
 
 ---
 
