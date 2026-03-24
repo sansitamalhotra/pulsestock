@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "https://pulsestock-api.onrender.com";
 
@@ -120,7 +121,7 @@ export default function AgentChat() {
                     fontFamily: "'Courier New', monospace",
                     whiteSpace: "pre-wrap",
                   }}>
-                    {msg.content}
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                 </motion.div>
               ))}
