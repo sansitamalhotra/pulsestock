@@ -1,10 +1,17 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "https://pulsestock-api.onrender.com";
+
+const SUGGESTED_PROMPTS = [
+  "Compare AAPL vs TSLA",
+  "Which tech stock has the best sentiment?",
+  "Is NVDA a buy right now?",
+  "What's dragging SHOP down?",
+  "Compare MSFT vs GOOGL vs META",
+];
 
 interface Message {
   role: "user" | "agent";
@@ -19,20 +26,22 @@ export default function AgentChat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [sessionId] = useState(() => Math.random().toString(36).slice(2));
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function sendMessage() {
-    if (!input.trim() || loading) return;
-    const userMsg = input.trim();
+  async function sendMessage(text?: string) {
+    const msg = text || input.trim();
+    if (!msg || loading) return;
     setInput("");
-    setMessages(prev => [...prev, { role: "user", content: userMsg }]);
+    setShowSuggestions(false);
+    setMessages(prev => [...prev, { role: "user", content: msg }]);
     setLoading(true);
     try {
-     const res = await fetch(`${API}/agent?q=${encodeURIComponent(userMsg)}&session_id=${sessionId}`);
+      const res = await fetch(`${API}/agent?q=${encodeURIComponent(msg)}&session_id=${sessionId}`);
       const data = await res.json();
       setMessages(prev => [...prev, { role: "agent", content: data.response }]);
     } catch {
@@ -43,7 +52,6 @@ export default function AgentChat() {
 
   return (
     <>
-      {/* floating button */}
       <motion.button
         onClick={() => setOpen(!open)}
         whileHover={{ scale: 1.05 }}
@@ -66,7 +74,6 @@ export default function AgentChat() {
         {open ? "CLOSE" : "AI ANALYST"}
       </motion.button>
 
-      {/* chat panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -76,7 +83,7 @@ export default function AgentChat() {
             transition={{ duration: 0.2 }}
             style={{
               position: "fixed", bottom: "80px", right: "24px", zIndex: 99,
-              width: "420px", height: "520px",
+              width: "420px", height: "560px",
               background: "#0a0a0a", border: "1px solid #1a1a1a",
               borderRadius: "16px", display: "flex", flexDirection: "column",
               overflow: "hidden", boxShadow: "0 0 40px rgba(0,0,0,0.8)",
@@ -96,7 +103,7 @@ export default function AgentChat() {
                 PULSESTOCK <span style={{ color: "#00ff88" }}>AI</span>
               </span>
               <span style={{ color: "#333", fontSize: "10px", fontFamily: "'Courier New', monospace", marginLeft: "auto" }}>
-                GPT-4o-mini
+                GPT-4o-mini · memory on
               </span>
             </div>
 
@@ -107,30 +114,49 @@ export default function AgentChat() {
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  style={{
-                    display: "flex",
-                    justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
-                  }}
+                  style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}
                 >
                   <div style={{
                     maxWidth: "85%",
                     background: msg.role === "user" ? "#00ff88" : "#111",
                     color: msg.role === "user" ? "#080808" : "#ccc",
-                    padding: "10px 14px", borderRadius: msg.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
+                    padding: "10px 14px",
+                    borderRadius: msg.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
                     fontSize: "12px", lineHeight: "1.7",
-                    fontFamily: "'Courier New', monospace",
-                    whiteSpace: "pre-wrap",
+                    fontFamily: msg.role === "user" ? "'Courier New', monospace" : "inherit",
                   }}>
-                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    {msg.role === "agent" ? <ReactMarkdown>{msg.content}</ReactMarkdown> : msg.content}
                   </div>
                 </motion.div>
               ))}
+
+              {/* suggested prompts */}
+              {showSuggestions && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "8px" }}>
+                  <div style={{ color: "#333", fontSize: "10px", letterSpacing: "2px", fontFamily: "'Courier New', monospace" }}>
+                    TRY ASKING:
+                  </div>
+                  {SUGGESTED_PROMPTS.map((prompt, i) => (
+                    <motion.button
+                      key={i}
+                      onClick={() => sendMessage(prompt)}
+                      whileHover={{ borderColor: "#00ff88", color: "#00ff88" }}
+                      style={{
+                        background: "transparent", border: "1px solid #222",
+                        borderRadius: "8px", padding: "8px 12px",
+                        color: "#555", fontSize: "11px", cursor: "pointer",
+                        fontFamily: "'Courier New', monospace", textAlign: "left",
+                        transition: "all 0.15s",
+                      }}
+                    >
+                      {prompt}
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+
               {loading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  style={{ display: "flex", gap: "4px", padding: "8px 0" }}
-                >
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: "flex", gap: "4px", padding: "8px 0" }}>
                   {[0, 1, 2].map(i => (
                     <motion.div
                       key={i}
@@ -159,7 +185,7 @@ export default function AgentChat() {
                 }}
               />
               <button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={loading}
                 style={{
                   background: loading ? "#1a1a1a" : "#00ff88",

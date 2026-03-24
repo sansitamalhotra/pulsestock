@@ -7,6 +7,8 @@ import TickerCards from "./components/TickerCards";
 import SentimentPanel from "./components/SentimentPanel";
 import PostsList from "./components/PostsList";
 import AgentChat from "./components/AgentChat";
+import { useRouter } from "next/navigation";
+
 
 interface SentimentData {
   ticker: string;
@@ -99,6 +101,11 @@ function ScrollingRow({ items, direction }: { items: React.ReactNode[]; directio
 export default function Home() {
   const [data, setData] = useState<SentimentData | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  function handleResult(d: SentimentData) {
+  setData(d);
+  router.push(`/${d.ticker.toLowerCase()}`);
+}
 
   const row1 = BG_TICKERS.slice(0, 6).flatMap((t, i) => [
     <BgTickerCard key={`t${i}`} {...t} />,
@@ -170,14 +177,14 @@ export default function Home() {
             <div style={{ color: "#2a2a2a", fontSize: "12px", letterSpacing: "5px", marginBottom: "44px" }}>
               SENTIMENT TERMINAL
             </div>
-            <SearchBar onResult={setData} onLoading={setLoading} />
+            <SearchBar onResult={handleResult} onLoading={setLoading} />
           </motion.div>
         </div>
       )}
 
       {(data || loading) && (
         <div style={{ padding: "20px 0 0 0" }}>
-          <SearchBar onResult={setData} onLoading={setLoading} />
+          <SearchBar onResult={handleResult} onLoading={setLoading} />
         </div>
       )}
 

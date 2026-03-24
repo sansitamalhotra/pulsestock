@@ -60,7 +60,7 @@ def compare_portfolio(tickers: str) -> str:
         except Exception as e:
             results.append({"ticker": ticker, "error": str(e)})
     return json.dumps(results)
-    
+
 tools = [get_sentiment, get_price, compare_portfolio]
 
 llm = ChatOpenAI(
